@@ -1,12 +1,29 @@
-class Solution(object):
-    def removeDuplicates(self, nums):
-        # Initialize an integer k that updates the kth index of the array...
-        # only when the current element does not match either of the two previous indexes. ...
-        k = 0
-        # Traverse all elements through loop...
-        for i in nums:
-            # If the index does not match elements, count that element and update it...
-            if k < 2 or i != nums[k - 2]:
-                nums[k] = i
-                k += 1
-        return k       # Return k after placing the final result in the first k slots of nums...
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        
+        # {element: [count, [index]]}
+        cnt = {n:[0, []] for n in nums}
+
+        # 삭제해야 하는 idx
+        del_idx = []
+        
+        for i in range(len(nums)):
+
+            idx = i
+            element = nums[i]
+
+            cnt[element][0] += 1
+            cnt[element][1].append(idx)
+            
+            # 등장 횟수 2 초과하는 idx 기록
+            if len(cnt[element][1])>2:
+                del_idx.append(idx)
+
+        # idx 뒤 원소부터 삭제
+        del_idx.sort(reverse=True)
+
+        for j in del_idx:
+            nums.pop(j)
+
+        k = len(nums)
+        return k
